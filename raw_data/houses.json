@@ -1,0 +1,30 @@
+[
+	{
+		"name": "Gryffindor",
+		"location": "Gryffindor tower",
+		"founder": "Godric Gryffindor",
+		"colors": "red, gold",
+		"ghost": "Nearly Headless Nick"
+	},
+	{
+		"name": "Ravenclaw",
+		"location": "Ravenclaw tower",
+		"founder": "Rowena Ravenclaw",
+		"colors": "blue, bronze",
+		"ghost": "Grey Lady"
+	},
+	{
+		"name": "Hufflepuff",
+		"location": "basement, kitchen area",
+		"founder": "Helga Hufflepuff",
+		"colors": "yellow, black",
+		"ghost": "Fat Friar"
+	},
+	{
+		"name": "Slytherin",
+		"location": "dungeons",
+		"founder": "Salazar Slytherin",
+		"colors": "green, silver",
+		"ghost": "Bloody Baron"
+	}
+]

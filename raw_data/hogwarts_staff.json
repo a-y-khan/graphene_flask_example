@@ -1,0 +1,50 @@
+[
+	{
+		"name": "Albus Dumbledore",
+		"job": "headmaster",
+		"specialiation": "transfiguration",
+		"wand": "elder and thestral tail hair, 15 inches",
+		"house": "Gryffindor",
+		"patronus": "phoenix"
+	},
+	{
+		"name": "Minerva McGonagall",
+		"job": "professor",
+		"specialiation": "transfiguration",
+		"wand": "fir and dragon heartstring, 9.5 inches",
+		"house": "Gryffindor",
+		"patronus": "cat"
+	},
+	{
+		"name": "Rubeus Hagrid",
+		"job": "gamekeeper",
+		"specialiation": null,
+		"wand": null,
+		"house": "Gryffindor",
+		"patronus": null
+	},
+	{
+		"name": "Severus Snape",
+		"job": "professor",
+		"specialiation": "potions",
+		"wand": null,
+		"house": "Slytherin",
+		"patronus": "doe"
+	},
+	{
+		"name": "Filius Flitwick",
+		"job": "professor",
+		"specialiation": "charms",
+		"wand": null,
+		"house": "Ravenclaw",
+		"patronus": null
+	},
+	{
+		"name": "Pomona Sprout",
+		"job": "professor",
+		"specialiation": "herbology",
+		"wand": null,
+		"house": "Hufflepuff",
+		"patronus": null
+	},
+]

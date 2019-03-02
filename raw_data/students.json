@@ -1,0 +1,52 @@
+[
+	{
+		"name": "Harry Potter",
+		"house":,
+		"wand":,
+		"pet":,
+		"patronus":,
+
+	},
+	{
+		"name": "Hermione Granger",
+	},
+	{
+		"name": "Ron Weasley",
+	},
+	{
+		"name": "Ginny Weasley",
+	},
+	{
+		"name": "Neville Longbottom",
+	},
+	{
+		"name": "Parvati Patil",
+	},
+	{
+		"name": "Cho Chang",
+	},
+	{
+		"name": "Luna Lovegood",
+	},
+	{
+		"name": "Padma Patil",
+	},
+	{
+		"name": "Draco Malfoy",
+	},
+	{
+		"name": "Pansy Parkinson",
+	},
+	{
+		"name": "Blaise Zabini",
+	},
+	{
+		"name": "Cedric Diggory",
+	},
+	{
+		"name": "Hannah Abbott",
+	},
+	{
+		"name": "Susan Bones",
+	},
+]
