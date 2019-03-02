@@ -1,52 +1,123 @@
 [
 	{
 		"name": "Harry Potter",
-		"house":,
-		"wand":,
-		"pet":,
-		"patronus":,
+		"house": "Gryffindor",
+		"wand_wood": "holly",
+		"wand_core": "phoenix feather",
+		"wand_length": 11,
+		"wand_length_unit": "inch"
 
 	},
 	{
 		"name": "Hermione Granger",
+		"house": "Gryffindor",
+		"wand_wood": "vine",
+		"wand_core": "dragon heartstring",
+		"wand_length": 10.75,
+		"wand_length_unit": "inch"
 	},
 	{
 		"name": "Ron Weasley",
+		"house": "Gryffindor",
+		"wand_wood": "willow",
+		"wand_core": "unicorn hair",
+		"wand_length": 14,
+		"wand_length_unit": "inch"
 	},
 	{
 		"name": "Ginny Weasley",
+		"house": "Gryffindor",
+		"wand_wood": "yew",
+		"wand_core": null,
+		"wand_length": 0,
+		"wand_length_unit": "inch"
 	},
 	{
 		"name": "Neville Longbottom",
+		"house": "Gryffindor",
+		"wand_wood": "cherry",
+		"wand_core": "unicorn hair",
+		"wand_length": 13,
+		"wand_length_unit": "inch"
 	},
 	{
 		"name": "Parvati Patil",
+		"house": "Gryffindor",
+		"wand_wood": null,
+		"wand_core": null,
+		"wand_length": 0,
+		"wand_length_unit": "inch"
 	},
 	{
 		"name": "Cho Chang",
+		"house": "Ravenclaw",
+		"wand_wood": null,
+		"wand_core": null,
+		"wand_length": 0,
+		"wand_length_unit": "inch"
 	},
 	{
 		"name": "Luna Lovegood",
+		"house": "Ravenclaw",
+		"wand_wood": null,
+		"wand_core": null,
+		"wand_length": 0,
+		"wand_length_unit": "inch"
 	},
 	{
 		"name": "Padma Patil",
+		"house": "Ravenclaw",
+		"wand_wood": null,
+		"wand_core": null,
+		"wand_length": 0,
+		"wand_length_unit": "inch"
 	},
 	{
 		"name": "Draco Malfoy",
+		"house": "Slytherin",
+		"wand_wood": "hawthorn",
+		"wand_core": "unicorn hair",
+		"wand_length": 10,
+		"wand_length_unit": "inch"
 	},
 	{
 		"name": "Pansy Parkinson",
+		"house": "Slytherin",
+		"wand_wood": null,
+		"wand_core": null,
+		"wand_length": 0,
+		"wand_length_unit": "inch"
 	},
 	{
 		"name": "Blaise Zabini",
+		"house": "Slytherin",
+		"wand_wood": null,
+		"wand_core": null,
+		"wand_length": 0,
+		"wand_length_unit": "inch"
 	},
 	{
 		"name": "Cedric Diggory",
+		"house": "Hufflepuff",
+		"wand_wood": "ash",
+		"wand_core": "unicorn hair",
+		"wand_length": 12.25,
+		"wand_length_unit": "inch"
 	},
 	{
 		"name": "Hannah Abbott",
+		"house": "Hufflepuff",
+		"wand_wood": null,
+		"wand_core": null,
+		"wand_length": 0,
+		"wand_length_unit": "inch"
 	},
 	{
 		"name": "Susan Bones",
+		"house": "Hufflepuff",
+		"wand_wood": null,
+		"wand_core": null,
+		"wand_length": 0,
+		"wand_length_unit": "inch"
 	},
 ]

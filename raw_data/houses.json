@@ -3,6 +3,7 @@
 		"name": "Gryffindor",
 		"location": "Gryffindor tower",
 		"founder": "Godric Gryffindor",
+		"crest": "lion",
 		"colors": "red, gold",
 		"ghost": "Nearly Headless Nick"
 	},
@@ -10,6 +11,7 @@
 		"name": "Ravenclaw",
 		"location": "Ravenclaw tower",
 		"founder": "Rowena Ravenclaw",
+		"crest": "eagle",
 		"colors": "blue, bronze",
 		"ghost": "Grey Lady"
 	},
@@ -17,6 +19,7 @@
 		"name": "Hufflepuff",
 		"location": "basement, kitchen area",
 		"founder": "Helga Hufflepuff",
+		"crest": "badger",
 		"colors": "yellow, black",
 		"ghost": "Fat Friar"
 	},
@@ -24,6 +27,7 @@
 		"name": "Slytherin",
 		"location": "dungeons",
 		"founder": "Salazar Slytherin",
+		"crest": "snake",
 		"colors": "green, silver",
 		"ghost": "Bloody Baron"
 	}

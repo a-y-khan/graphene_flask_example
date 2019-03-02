@@ -18,7 +18,9 @@ class HouseConnetion(relay.Connection):
 class Query(graphene.ObjectType):
 	node = relay.Node.Field()
 	
-	all_houses = SQLAlchemyConnectionField(HouseConnetion, sort=None)
+	# set sort=None argument to disable ability to sort
+	# all_houses = SQLAlchemyConnectionField(HouseConnetion, sort=None)
+	all_houses = SQLAlchemyConnectionField(HouseConnetion)
 
 
 schema = graphene.Schema(query=Query, types=[House])
