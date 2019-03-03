@@ -6,7 +6,7 @@ from models import Student as StudentModel
 from models import Pet as PetModel
 
 
-class House(SQLAlchemyObjectType):
+class HouseNode(SQLAlchemyObjectType):
 	class Meta:
 		model = HouseModel
 		interfaces = (relay.Node, )
@@ -14,10 +14,10 @@ class House(SQLAlchemyObjectType):
 
 class HouseConnetion(relay.Connection):
 	class Meta:
-		node = House
+		node = HouseNode
 
 
-class Student(SQLAlchemyObjectType):
+class StudentNode(SQLAlchemyObjectType):
 	class Meta:
 		model = StudentModel
 		interfaces = (relay.Node, )
@@ -25,10 +25,10 @@ class Student(SQLAlchemyObjectType):
 
 class StudentConnection(relay.Connection):
 	class Meta:
-		node = Student
+		node = StudentNode
 
 
-class Pet(SQLAlchemyObjectType):
+class PetNode(SQLAlchemyObjectType):
 	class Meta:
 		model = PetModel
 		interfaces = (relay.Node, )
@@ -36,7 +36,7 @@ class Pet(SQLAlchemyObjectType):
 
 class PetConnection(relay.Connection):
 	class Meta:
-		node = Pet
+		node = PetNode
 
 
 # TODO: more sorts and queries!
@@ -51,4 +51,4 @@ class Query(graphene.ObjectType):
 	all_pets = SQLAlchemyConnectionField(PetConnection)
 
 
-schema = graphene.Schema(query=Query, types=[House, Student, Pet])
+schema = graphene.Schema(query=Query, types=[HouseNode, StudentNode, PetNode])
