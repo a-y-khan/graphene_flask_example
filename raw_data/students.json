@@ -6,7 +6,6 @@
 		"wand_core": "phoenix feather",
 		"wand_length": 11,
 		"wand_length_unit": "inch"
-
 	},
 	{
 		"name": "Hermione Granger",
@@ -119,5 +118,5 @@
 		"wand_core": null,
 		"wand_length": 0,
 		"wand_length_unit": "inch"
-	},
+	}
 ]
