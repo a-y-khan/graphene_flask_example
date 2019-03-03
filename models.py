@@ -26,7 +26,7 @@ class Student(Base):
 	house_id = Column(Integer, ForeignKey('house.id'))
 	house = relationship(
 		House,
-		backref=backref('students', uselist=True, cascade='delete,all')
+		backref=backref('houses', uselist=True, cascade='delete,all')
 	)
 
 
@@ -38,5 +38,5 @@ class Pet(Base):
 	student_id = Column(Integer, ForeignKey('student.id'))
 	student = relationship(
 		Student,
-		backref=backref('pets', uselist=True, cascade='delete,all')
+		backref=backref('students', uselist=True, cascade='delete,all')
 	)
