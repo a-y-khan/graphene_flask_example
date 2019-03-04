@@ -50,19 +50,32 @@ class CreatePet(relay.ClientIDMutation):
 		student_name = graphene.String(required=True)
 
 	pet = graphene.Field(PetNode)
+	status = graphene.Boolean()
 
 	@classmethod
 	def mutate_and_get_payload(cls, root, info, **input):
 		query = StudentNode.get_query(info)
+		student_query = StudentNode.get_query(info)
+		if not input['name']:
+			raise GraphQLError('Please provide pet name.')
+		if not input['species']:
+			raise GraphQLError('Please provide pet species.')
+		if not input['student_name']:
+			raise GraphQLError('Please provide student name.')
+
 		student = query.filter(StudentModel.name == input['student_name']).first()
+		if not student:
+			raise GraphQLError(f'Could not find student {input["student_name"]}')
+
 		pet = PetModel(name=input['name'],
 			           species=input['species'],
 			           student=student)
 
 		db_session.add(pet)
 		db_session.commit()
+		status = True
 
-		return CreatePet(pet=pet)
+		return CreatePet(pet=pet, status=status)
 
 
 class ChangeStudentHouse(relay.ClientIDMutation):
@@ -71,18 +84,30 @@ class ChangeStudentHouse(relay.ClientIDMutation):
 		house = graphene.String(required=True)
 
 	student = graphene.Field(StudentNode)
+	status = graphene.Boolean()
 
 	@classmethod
 	def mutate_and_get_payload(cls, root, info, **input):
 		student_query = StudentNode.get_query(info)
+		if not input['name']:
+			raise GraphQLError('Please provide student name.')
+		if not input['house']:
+			raise GraphQLError('Please provide student house.')
+	
 		student = student_query.filter(StudentModel.name == input['name']).first()
+		if not student:
+			raise GraphQLError(f'Could not find student {input["name"]}')
+	
 		house_query = HouseNode.get_query(info)
 		house = house_query.filter(HouseModel.name == input['house']).first()
+		if not house:
+			raise GraphQLError(f'Could not find house {input["house"]}')
 
 		student.house = house
 		db_session.commit()
+		status = True
 
-		return ChangeStudentHouse(student=student)
+		return ChangeStudentHouse(student=student, status=status)
 
 
 class Query(graphene.ObjectType):
@@ -104,13 +129,13 @@ class Query(graphene.ObjectType):
 	def resolve_student_by_name(self, info, name):
 		query = StudentNode.get_query(info)
 		if not name:
-			raise GraphQLError("Please provide student name.")
+			raise GraphQLError('Please provide student name.')
 		return query.filter(StudentModel.name == name).first()
 
 	def resolve_pet(self, info, name):
 		query = PetNode.get_query(info)
 		if not name:
-			raise GraphQLError("Please provide pet name.")
+			raise GraphQLError('Please provide pet name.')
 		return query.filter(PetModel.name == name).first()
 
 	# traversing relationship between pet and student
@@ -118,7 +143,7 @@ class Query(graphene.ObjectType):
 		student_query = StudentNode.get_query(info)
 		pet_query = PetNode.get_query(info)
 		if not student_name:
-			raise GraphQLError("Please provide student name.")
+			raise GraphQLError('Please provide student name.')
 		student_result = student_query.filter(StudentModel.name == student_name).first()
 		return pet_query.filter(PetModel.student_id == student_result.id).first()
 
