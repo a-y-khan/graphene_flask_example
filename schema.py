@@ -7,6 +7,8 @@ from models import House as HouseModel
 from models import Student as StudentModel
 from models import Pet as PetModel
 
+from database import db_session
+
 
 class HouseNode(SQLAlchemyObjectType):
 	class Meta:
@@ -40,8 +42,48 @@ class PetConnection(relay.Connection):
 	class Meta:
 		node = PetNode
 
+class CreatePet(relay.ClientIDMutation):
+#class CreatePet(graphene.Mutation):
+	class Input:
+		name = graphene.String(required=True)
+		species = graphene.String(required=True)
+		student_name = graphene.String(required=True)
 
-# TODO: more sorts and queries!
+	pet = graphene.Field(PetNode)
+
+	@classmethod
+	def mutate_and_get_payload(cls, root, info, **input):
+		query = StudentNode.get_query(info)
+		student = query.filter(StudentModel.name == input['student_name']).first()
+		pet = PetModel(name=input['name'],
+			           species=input['species'],
+			           student=student)
+
+		db_session.add(pet)
+		db_session.commit()
+
+		return CreatePet(pet=pet)
+
+
+class ChangeStudentHouse(relay.ClientIDMutation):
+	class Input:
+		name = graphene.String(required=True)
+		house = graphene.String(required=True)
+
+	student = graphene.Field(StudentNode)
+
+	@classmethod
+	def mutate_and_get_payload(cls, root, info, **input):
+		student_query = StudentNode.get_query(info)
+		student = student_query.filter(StudentModel.name == input['name']).first()
+		house_query = HouseNode.get_query(info)
+		house = house_query.filter(HouseModel.name == input['house']).first()
+
+		student.house = house
+		db_session.commit()
+
+		return ChangeStudentHouse(student=student)
+
 
 class Query(graphene.ObjectType):
 	node = relay.Node.Field()
@@ -80,8 +122,9 @@ class Query(graphene.ObjectType):
 		student_result = student_query.filter(StudentModel.name == student_name).first()
 		return pet_query.filter(PetModel.student_id == student_result.id).first()
 
-## Mutation!
+class Mutation(graphene.ObjectType):
+	create_pet = CreatePet.Field()
+	change_student_house = ChangeStudentHouse.Field()
 
 
-
-schema = graphene.Schema(query=Query, types=[HouseNode, StudentNode, PetNode])
+schema = graphene.Schema(query=Query, types=[HouseNode, StudentNode, PetNode], mutation=Mutation)

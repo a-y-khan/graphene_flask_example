@@ -5,10 +5,16 @@ from flask_graphql import GraphQLView
 from schema import schema
 
 app = Flask(__name__)
-#app.debug = True
 
 default_query = '''
 {
+  allStudents {
+    edges {
+      node {
+        id
+      }
+    }
+  }
 }
 '''.strip()
 
