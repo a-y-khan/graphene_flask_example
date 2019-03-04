@@ -1,5 +1,5 @@
 # graphene_flask_example
-Graphene/Flask example for SLC Python talk.
+Graphene/Flask example for SLC Python talk. Slides are available on [Google Slides](https://docs.google.com/presentation/d/1kHHAsFk-U-JQQmj7f32HE9FTnsJJECo9cmOxyCTdnB8/edit?usp=sharing).
 
 ## Python version
 
