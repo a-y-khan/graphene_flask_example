@@ -37,6 +37,8 @@ class PetNode(SQLAlchemyObjectType):
 		model = PetModel
 		interfaces = (relay.Node, )
 
+	animal = graphene.String(description='What kind of pet?', deprecation_reason='Replaced with species.')
+
 
 class PetConnection(relay.Connection):
 	class Meta:
