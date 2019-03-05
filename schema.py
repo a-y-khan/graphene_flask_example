@@ -45,14 +45,13 @@ class PetConnection(relay.Connection):
 		node = PetNode
 
 class CreatePet(relay.ClientIDMutation):
-#class CreatePet(graphene.Mutation):
 	class Input:
 		name = graphene.String(required=True)
 		species = graphene.String(required=True)
 		student_name = graphene.String(required=True)
 
 	pet = graphene.Field(PetNode)
-	status = graphene.Boolean()
+	ok = graphene.Boolean()
 
 	@classmethod
 	def mutate_and_get_payload(cls, root, info, **input):
@@ -75,9 +74,9 @@ class CreatePet(relay.ClientIDMutation):
 
 		db_session.add(pet)
 		db_session.commit()
-		status = True
+		ok = True
 
-		return CreatePet(pet=pet, status=status)
+		return CreatePet(pet=pet, ok=ok)
 
 
 class ChangeStudentHouse(relay.ClientIDMutation):
@@ -86,7 +85,7 @@ class ChangeStudentHouse(relay.ClientIDMutation):
 		house = graphene.String(required=True)
 
 	student = graphene.Field(StudentNode)
-	status = graphene.Boolean()
+	ok = graphene.Boolean()
 
 	@classmethod
 	def mutate_and_get_payload(cls, root, info, **input):
@@ -107,15 +106,16 @@ class ChangeStudentHouse(relay.ClientIDMutation):
 
 		student.house = house
 		db_session.commit()
-		status = True
+		ok = True
 
-		return ChangeStudentHouse(student=student, status=status)
+		return ChangeStudentHouse(student=student, ok=ok)
 
 
 class Query(graphene.ObjectType):
 	node = relay.Node.Field()
 	
-	# all data in table
+	# default filters that return all data in table
+	#
 	# set sort=None argument to disable ability to sort
 	# all_houses = SQLAlchemyConnectionField(HouseConnection, sort=None)
 	all_houses = SQLAlchemyConnectionField(HouseConnection)
