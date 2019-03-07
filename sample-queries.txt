@@ -1,0 +1,116 @@
+query q_all_pets {
+  allPets {
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+    edges {
+      cursor
+      node {
+        name
+        species
+        student {
+          name
+        }
+      }
+    }
+  }
+}
+query q_all_pets_slice {
+  allPets(first: 1) {
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+    edges {
+      cursor
+      node {
+        name
+        species
+        student {
+          name
+        }
+      }
+    }
+  }
+}
+query q_all_students {
+  allStudents
+}
+query q_all_students_sort1 {
+  allStudents(sort: name_desc) {
+    edges {
+      node {
+        name
+      }
+    }
+  }
+}
+query q_all_students_sort2 {
+  allStudents(sort: [name_asc, house_id_desc]) {
+    edges {
+      node {
+        id
+        name
+        houseId
+      }
+    }
+  }
+}
+query q_all_houses {
+  allHouses
+}
+query q_student_by_name {
+  studentByName(name: "Cho Chang")
+}
+query q_pet_student_name {
+  petByStudentName(studentName: "Hermione Granger") {
+    id
+    name
+    species
+    studentId
+    student {
+      id
+      house {
+        name
+        location
+      }
+    }
+  } 
+}
+query q_pet {
+  pet(name: "Pigwidgeon") {
+    id
+    name
+    species
+    student {
+      name
+    }
+  }
+}
+mutation m_change_house {
+  changeStudentHouse(input: {name: "Ron Weasley", house: "Ravenclaw"})
+}
+mutation m_create_pet {
+  createPet(input: {name: "Charlie", species: "cat", studentName: "Hermione Granger"})
+}
+query q_get_charlie {
+  pet(name: "Charlie") {
+    id
+    species
+    student {
+      name
+    }
+  }
+}
+mutation {
+  changeStudentHouse(input: {name: "Don Weatherby", house: "Ravenclaw"}) {
+    ok
+    clientMutationId
+  }
+}
+
