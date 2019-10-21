@@ -1,50 +1,74 @@
 [
 	{
 		"name": "Albus Dumbledore",
-		"position": "headmaster",
-		"specialiation": "transfiguration",
-		"wand": "elder and thestral tail hair, 15 inches",
-		"house": "Gryffindor",
-		"patronus": "phoenix"
+		"position": "Headmaster",
+		"specialization": "Transfiguration",
+		"wand_wood": "elder",
+		"wand_core": "thestral tail hair",
+		"wand_length": 15,
+		"house": "Gryffindor"
 	},
 	{
 		"name": "Minerva McGonagall",
-		"position": "professor",
-		"specialiation": "transfiguration",
-		"wand": "fir and dragon heartstring, 9.5 inches",
-		"house": "Gryffindor",
-		"patronus": "cat"
+		"position": "Professor",
+		"specialization": "Transfiguration",
+		"wand_wood": "fir",
+		"wand_core": "dragon heartstring",
+		"wand_length": 9.5,
+		"house": "Gryffindor"
 	},
 	{
 		"name": "Rubeus Hagrid",
-		"position": "gamekeeper",
-		"specialiation": null,
-		"wand": null,
-		"house": "Gryffindor",
-		"patronus": null
+		"position": "Keeper of Keys and Grounds",
+		"specialization": "Gamekeeper",
+		"wand_wood": null,
+		"wand_core": null,
+		"wand_length": 0,
+		"house": "Gryffindor"
 	},
 	{
 		"name": "Severus Snape",
-		"position": "professor",
-		"specialiation": "potions",
-		"wand": null,
-		"house": "Slytherin",
-		"patronus": "doe"
+		"position": "Professor",
+		"specialization": "Potions",
+		"wand_wood": null,
+		"wand_core": null,
+		"wand_length": 0,
+		"house": "Slytherin"
 	},
 	{
 		"name": "Filius Flitwick",
-		"position": "professor",
-		"specialiation": "charms",
-		"wand": null,
-		"house": "Ravenclaw",
-		"patronus": null
+		"position": "Professor",
+		"specialization": "Charms",
+		"wand_wood": null,
+		"wand_core": null,
+		"wand_length": 0,
+		"house": "Ravenclaw"
 	},
 	{
 		"name": "Pomona Sprout",
-		"position": "professor",
-		"specialiation": "herbology",
-		"wand": null,
-		"house": "Hufflepuff",
-		"patronus": null
+		"position": "Professor",
+		"specialization": "Herbology",
+		"wand_wood": null,
+		"wand_core": null,
+		"wand_length": 0,
+		"house": "Hufflepuff"
 	},
+	{
+		"name": "Sybill Trelawney",
+		"position": "Professor",
+		"specialization": "Divination",
+		"wand_wood": null,
+		"wand_core": null,
+		"wand_length": 0,
+		"house": "Ravenclaw"
+	},
+	{
+		"name": "Argus Filch",
+		"position": "Caretaker",
+		"specialization": "Custodial Services",
+		"wand_wood": null,
+		"wand_core": null,
+		"wand_length": 0,
+		"house": null
+	}
 ]

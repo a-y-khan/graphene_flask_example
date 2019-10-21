@@ -1,44 +1,45 @@
-from sqlalchemy import Column, ForeignKey, Integer, Float, String
-from sqlalchemy.orm import backref, relationship
+import sqlalchemy as sa
+import sqlalchemy.orm as sa_orm
 
 from database import Base
-
+import database as db
 
 class House(Base):
 	__tablename__ = 'house'
-	id = Column(Integer, primary_key=True)
-	name = Column(String)
-	location = Column(String, doc="Location on Hogwarts campus.")
-	founder = Column(String, doc="Hogwarts house founder.")
-	colors = Column(String, doc="Each Hogwarts house has two colors.")
-	crest = Column(String, doc="Hogwarts house crest.")
-	ghost = Column(String, doc="Each Hogwarts house has a resident ghost.")
-
-
-## TODO: create Wand table?
+	id = sa.Column(sa.Integer, primary_key=True)
+	name = sa.Column(sa.String, doc="TODO")
+	location = sa.Column(sa.String, doc="Location on Hogwarts campus.")
+	founder = sa.Column(sa.String, doc="Hogwarts house founder.")
+	colors = sa.Column(sa.String, doc="Each Hogwarts house has two colors.")
+	crest = sa.Column(sa.String, doc="Hogwarts house crest.")
+	ghost = sa.Column(sa.String, doc="Each Hogwarts house has a resident ghost.")
 
 class Student(Base):
 	__tablename__ = 'student'
-	id = Column(Integer, primary_key=True)
-	name = Column(String, doc="Hogwarts student name. Typically first name, surname.")
-	wand_wood = Column(String, doc="Hogwarts student's wand material.")
-	wand_core = Column(String, doc="Hogwarts student's wand core.")
-	wand_length = Column(Float, doc="Length of student's wand.")
-	wand_length_unit = Column(String, doc="Measurement unit used for wand length.")
-	house_id = Column(Integer, ForeignKey('house.id'))
-	house = relationship(
-		House,
-		backref=backref('houses', uselist=True, cascade='delete,all')
-	)
+	id = sa.Column(sa.Integer, primary_key=True)
+	name = sa.Column(sa.String, doc="Hogwarts student name. Typically first name, surname.")
+	wand_wood = sa.Column(sa.String, doc="Hogwarts student's wand material.")
+	wand_core = sa.Column(sa.String, doc="Hogwarts student's wand core.")
+	wand_length = sa.Column(sa.Float, doc="Length of student's wand.")
+	wand_length_unit = sa.Column(sa.String, doc="Measurement unit used for wand length.", default="inch")
+	house_id = sa.Column(sa.Integer, sa.ForeignKey("house.id"))
+	# house = sa_orm.relationship(
+	# 	House,
+	# 	backref=sa_orm.backref('houses', uselist=True, cascade="delete,all"))
+	house = sa_orm.relationship(House)
 
-
-class Pet(Base):
-	__tablename__ = 'pet'
-	id = Column(Integer, primary_key=True)
-	name = Column(String, doc="Pet name.")
-	species = Column(String, doc="Pet species.")
-	student_id = Column(Integer, ForeignKey('student.id'))
-	student = relationship(
-		Student,
-		backref=backref('students', uselist=True, cascade='delete,all')
-	)
+class Staff(Base):
+	__tablename__ = 'staff'
+	id = sa.Column(sa.Integer, primary_key=True)
+	name = sa.Column(sa.String, doc="Hogwarts staff member name. "
+	                                "Typically first name, surname.")
+	position = sa.Column(sa.String, doc="TODO")
+	specialization = sa.Column(sa.String, doc="TODO")
+	wand_wood = sa.Column(sa.String, doc="Hogwarts staff member's wand material.")
+	wand_core = sa.Column(sa.String, doc="Hogwarts staff member's wand core.")
+	wand_length = sa.Column(sa.Float, doc="Length of staff member's wand.")
+	wand_length_unit = sa.Column(sa.String,
+	                             doc="Measurement unit used for wand length. "
+	                                 "Default is inches", default="inch")
+	house_id = sa.Column(sa.Integer, sa.ForeignKey("house.id"))
+	house = sa_orm.relationship(House)

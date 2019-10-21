@@ -24,7 +24,7 @@
 		"wand_length_unit": "inch"
 	},
 	{
-		"name": "Ginny Weasley",
+		"name": "Ginevra Weasley",
 		"house": "Gryffindor",
 		"wand_wood": "yew",
 		"wand_core": null,
@@ -114,6 +114,14 @@
 	{
 		"name": "Susan Bones",
 		"house": "Hufflepuff",
+		"wand_wood": null,
+		"wand_core": null,
+		"wand_length": 0,
+		"wand_length_unit": "inch"
+	},
+	{
+		"name": "Colin Creevey",
+		"house": "Gryffindor",
 		"wand_wood": null,
 		"wand_core": null,
 		"wand_length": 0,
