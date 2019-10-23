@@ -1,10 +1,10 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as sa_orm
 
-from database import Base
+from database import Base as db_Base
 import database as db
 
-class House(Base):
+class House(db_Base):
 	__tablename__ = 'house'
 	id = sa.Column(sa.Integer, primary_key=True)
 	name = sa.Column(sa.String, doc="TODO")
@@ -14,7 +14,7 @@ class House(Base):
 	crest = sa.Column(sa.String, doc="Hogwarts house crest.")
 	ghost = sa.Column(sa.String, doc="Each Hogwarts house has a resident ghost.")
 
-class Student(Base):
+class Student(db_Base):
 	__tablename__ = 'student'
 	id = sa.Column(sa.Integer, primary_key=True)
 	name = sa.Column(sa.String, doc="Hogwarts student name. Typically first name, surname.")
@@ -28,7 +28,7 @@ class Student(Base):
 	# 	backref=sa_orm.backref('houses', uselist=True, cascade="delete,all"))
 	house = sa_orm.relationship(House)
 
-class Staff(Base):
+class Staff(db_Base):
 	__tablename__ = 'staff'
 	id = sa.Column(sa.Integer, primary_key=True)
 	name = sa.Column(sa.String, doc="Hogwarts staff member name. "
