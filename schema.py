@@ -48,117 +48,88 @@ class SearchResult(gp.Union):
     class Meta:
         types = (StaffNode, StudentNode)
 
-
-# # TODO: add pet only through student mutation?
-# # class CreatePet(gp.relay.ClientIDMutation):
-# # 	class Input:
-# # 		name = gp.String(required=True)
-# # 		species = gp.String(required=True)
-# # 		# student_name = gp.String(required=True)
-
-# # 	pet = gp.Field(PetNode)
-# # 	ok = gp.Boolean()
-
-# # 	@classmethod
-# # 	def mutate_and_get_payload(cls, root, info, pet_name, pet_species, id):
-# # 		print(from_global_id(id))
-# # # 		query = StudentNode.get_query(info)
-# # # 		# student_query = StudentNode.get_query(info)
-# # # 		if not input['name']:
-# # # 			raise gq.GraphQLError('Please provide pet name.')
-# # # 		if not input['species']:
-# # # 			raise gq.GraphQLError('Please provide pet species.')
-# # # 		# if not input['student_name']:
-# # # 		# 	raise gq.GraphQLError('Please provide student name.')
-
-# # # 		# student = query.filter(StudentModel.name == input['student_name']).first()
-# # # 		# if not student:
-# # # 		# 	raise gq.GraphQLError(f'Could not find student {input["student_name"]}')
-
-# # 		# pet = PetModel(name=input['name'],
-# # 		# 	           species=input['species'],
-# # 		# 	           student=student)
-# # 		pet = PetModel(name=input['name'],
-# # 			           species=input['species'])
-
-# # 		db.db_session.add(pet)
-# # 		db.db_session.commit()
-# # 		ok = True
-
-# # 		return CreatePet(pet=pet, ok=ok)
-
-
-# class ChangeStudentHouse(gp.relay.ClientIDMutation):
-# 	class Input:
-# 		name = graphene.String(required=True)
-# 		house = graphene.String(required=True)
-
-# 	student = graphene.Field(StudentNode)
-# 	ok = graphene.Boolean()
-
-# 	@classmethod
-# 	def mutate_and_get_payload(cls, root, info, student_name, house_name, id):
-# 		print(from_global_id(id))
-# # 		student_query = StudentNode.get_query(info)
-# # 		if not input['name']:
-# # 			raise gq.GraphQLError('Please provide student name.')
-# # 		if not input['house']:
-# # 			raise gq.GraphQLError('Please provide student house.')
-	
-# # 		student = student_query.filter(StudentModel.name == input['name']).first()
-# # 		if not student:
-# # 			raise gq.GraphQLError(f'Could not find student {input["name"]}')
-	
-# # 		house_query = HouseNode.get_query(info)
-# # 		house = house_query.filter(HouseModel.name == input['house']).first()
-# # 		if not house:
-# # 			raise gq.GraphQLError(f'Could not find house {input["house"]}')
-# # 		student.house = house
-# # 		db.db_session.commit()
-# # 		ok = True
-# # 		return ChangeStudentHouse(student=student, ok=ok)
-
 class CreateStudent(gp.relay.ClientIDMutation):
 	class Input:
 		name = gp.String(required=True)
-		id = gp.ID()
-		# etc.
+		house_name = gp.String(required=True)
+		wand_wood = gp.String()
+		wand_core = gp.String()
+		wand_length = gp.Float()
+		wand_length_unit = gp.String()
 
 	student = gp.Field(StudentNode)
 	success = gp.Boolean()
 
 	@classmethod
-	# def mutate_and_get_payload(cls, root, info, name, wand_wood, wand_core, wand_length, wand_length_unit, house_name, id):
-	def mutate_and_get_payload(cls, root, info, name, id):
-		print(gq_relay.from_global_id(id))
-		print(name)
+	def mutate_and_get_payload(cls, root, info, **input):
+		# schema checks for required fields!
+		house_query = HouseNode.get_query(info)
+		house = house_query.filter(HouseModel.name == input['house_name']).first()
+		if not house:
+			raise gq.GraphQLError(f'Could not find house with name {input["house_name"]}')
 
-		success = False
-		return CreateStudent(student=None, success=success)
+		student = StudentModel(name=input['name'],
+		                       house=house,
+							   wand_wood=input.get('wand_wood'),
+							   wand_core=input.get('wand_core'),
+							   wand_length=input.get('wand_length', 0),
+							   wand_length_unit=input.get('wand_length_unit'))
 
+		student_query = StudentNode.get_query(info)
+		found_students = student_query.filter(
+			(StudentModel.name == student.name) and
+		    (StudentModel.house_id == student.house_id) and
+			(StudentModel.wand_wood == student.wand_wood) and
+			(StudentModel.wand_core == student.wand_core) and
+			(StudentModel.wand_length == student.wand_length) and
+			(StudentModel.wand_length_unit == student.wand_length_unit)).all()
+
+		print(found_students)
+		if len(found_students):
+			for s in found_students:
+				print(s.id)
+			raise gq.GraphQLError(f'Student with attributes {input} already exists')
+			# return CreateStudent(student=None, success=False)
+
+		db.db_session.add(student)
+		db.db_session.commit()
+		return CreateStudent(student=student, success=True)
+
+class DeleteStudent(gp.relay.ClientIDMutation):
+	class Input:
+		id = gp.ID(required=True)
+
+	student = gp.Field(StudentNode)
+	success = gp.Boolean()
+
+	@classmethod
+	def mutate_and_get_payload(cls, root, info, id):
+		student_id = gq_relay.from_global_id(id)[1]
+		student_query = StudentNode.get_query(info)
+		student = student_query.filter(StudentModel.id == student_id).first()
+		if not student:
+			raise gq.GraphQLError(f'Could not find student with id {id}')
+
+		db.db_session.delete(student)
+		db.db_session.commit()
+		return DeleteStudent(student=student, success=True)
 
 class ChangeStudentHouse(gp.relay.ClientIDMutation):
 	class Input:
-		name = gp.String(required=True)
-		house = gp.String(required=True)
-		id = gp.ID()
+		house_name = gp.String(required=True)
+		id = gp.ID(required=True)
 
 	student = gp.Field(StudentNode)
 	success = gp.Boolean()
 
 	@classmethod
-	def mutate_and_get_payload(cls, root, info, name, house_name, id):
+	def mutate_and_get_payload(cls, root, info, house_name, id):
 		# student_query = StudentNode.get_query(info)
-		print(gq_relay.from_global_id(id))
-		student_query = Student.objects.get(pk=gq_relay.from_global_id(id)[1])
-		if not name:
-			raise gq.GraphQLError('Please provide student name.')
-		if not house_name:
-			raise gq.GraphQLError('Please provide student house.')
-	
-		student = student_query.filter(StudentModel.name == name).first()
+		student_id = gq_relay.from_global_id(id)[1]
+		student_query = StudentNode.get_query(info)
+		student = student_query.filter(StudentModel.id == student_id).first()
 		if not student:
-			raise gq.GraphQLError(f'Could not find student {name}')
+			raise gq.GraphQLError(f'Could not find student with id {id}')
 	
 		house_query = HouseNode.get_query(info)
 		house = house_query.filter(HouseModel.name == house_name).first()
@@ -167,10 +138,8 @@ class ChangeStudentHouse(gp.relay.ClientIDMutation):
 
 		student.house = house
 		db.db_session.commit()
-		success = True
 
-		return ChangeStudentHouse(student=student, success=success)
-
+		return ChangeStudentHouse(student=student, success=True)
 
 class Query(gp.ObjectType):
 	node = gp.relay.Node.Field()
@@ -197,19 +166,19 @@ class Query(gp.ObjectType):
 		# for demonstration purposes
 		pprint(str(query))
 		if not name:
-			raise gq.GraphQLError('Please provide student name.')
+			raise gq.GraphQLError('Please provide student name')
 		return query.filter(StudentModel.name == name).first()
 
 	def resolve_staff_by_name(self, info, name):
 		query = StaffNode.get_query(info)
 		if not name:
-			raise gq.GraphQLError('Please provide staff member name.')
+			raise gq.GraphQLError('Please provide staff member name')
 		return query.filter(StaffModel.name == name).first()
 	
 	def resolve_house_by_name(self, info, name):
 		query = HouseNode.get_query(info)
 		if not name:
-			raise gq.GraphQLError('Please provide Hogwarts house name.')
+			raise gq.GraphQLError('Please provide Hogwarts house name')
 		return query.filter(HouseModel.name == name).first()
 
 	def resolve_staff_by_position(self, info, position):
@@ -217,7 +186,7 @@ class Query(gp.ObjectType):
 		# for demonstration purposes
 		pprint(str(query))
 		if not position:
-			raise gq.GraphQLError('Please provide staff position.')
+			raise gq.GraphQLError('Please provide staff position')
 		r = query.filter(StaffModel.position == position).all()
 		return r
 
@@ -226,7 +195,7 @@ class Query(gp.ObjectType):
 		student_query = StudentNode.get_query(info)
 		house_query = HouseNode.get_query(info)
 		if not house_name:
-			raise gq.GraphQLError('Please provide house name.')
+			raise gq.GraphQLError('Please provide house name')
 
 		house = house_query.filter(HouseModel.name == house_name).first()
 
@@ -234,20 +203,9 @@ class Query(gp.ObjectType):
 		student_results = student_query.filter(StudentModel.house == house).all()
 		return staff_results + student_results
 
-
-# 	# TODO: new traverse relationship!!!
-
-# 	# # traversing relationship between pet and student
-# 	# def resolve_pet_by_student_name(self, info, student_name):
-# 	# 	student_query = StudentNode.get_query(info)
-# 	# 	pet_query = PetNode.get_query(info)
-# 	# 	if not student_name:
-# 	# 		raise gq.GraphQLError('Please provide student name.')
-# 	# 	student_result = student_query.filter(StudentModel.name == student_name).first()
-# 	# 	return pet_query.filter(PetModel.student_id == student_result.id).first()
-
 class Mutation(gp.ObjectType):
 	create_student = CreateStudent.Field()
+	delete_student = DeleteStudent.Field()
 	change_student_house = ChangeStudentHouse.Field()
 
 
