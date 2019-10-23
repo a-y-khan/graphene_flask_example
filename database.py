@@ -32,14 +32,6 @@ def init_db():
 	with open('raw_data/students.json', 'rt') as file:
 		students = json.load(file)
 		for student in students:
-			# students_map[student['name']] =\
-			# 	Student(name=student['name'],
-			# 		    house=houses_map[student['house']],
-			# 		    wand_wood=student['wand_wood'],
-			# 		    wand_core=student['wand_core'],
-			# 		    wand_length=float(student['wand_length']),
-			# 		    wand_length_unit=student['wand_length_unit'])
-			# db_session.add(students_map[student['name']])
 			student_model = Student(name=student['name'],
 					  		 		house=houses_map[student['house']],
 					 		  		wand_wood=student['wand_wood'],
