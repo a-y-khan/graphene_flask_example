@@ -1,7 +1,7 @@
 import graphene as gp
-#from graphene_sqlalchemy import utils
 import graphene_sqlalchemy as gp_sa
 import graphql as gq
+import graphql_relay as gq_relay
 from pprint import pprint
 
 from models import House as HouseModel
@@ -43,6 +43,10 @@ class StaffNode(gp_sa.SQLAlchemyObjectType):
 class StaffConnection(gp.relay.Connection):
 	class Meta:
 		node = StaffNode
+
+class SearchResult(gp.Union):
+    class Meta:
+        types = (StaffNode, StudentNode)
 
 
 # # TODO: add pet only through student mutation?
@@ -114,21 +118,30 @@ class StaffConnection(gp.relay.Connection):
 # # 		ok = True
 # # 		return ChangeStudentHouse(student=student, ok=ok)
 
-# # TODO: optionally add pet?
-# class AddStudent(gp.relay.ClientIDMutation):
-# 	class Input:
-# 		name = gp.String(required=True)
-# 		# etc.
+class CreateStudent(gp.relay.ClientIDMutation):
+	class Input:
+		name = gp.String(required=True)
+		id = gp.ID()
+		# etc.
 
-# 	@classmethod
-# 	def mutate_and_get_payload(cls, root, info, name, wand_wood, wand_core, wand_length, wand_length_unit, house_name, id):
-# 		print(from_global_id(id))
+	student = gp.Field(StudentNode)
+	success = gp.Boolean()
+
+	@classmethod
+	# def mutate_and_get_payload(cls, root, info, name, wand_wood, wand_core, wand_length, wand_length_unit, house_name, id):
+	def mutate_and_get_payload(cls, root, info, name, id):
+		print(gq_relay.from_global_id(id))
+		print(name)
+
+		success = False
+		return CreateStudent(student=None, success=success)
 
 
 class ChangeStudentHouse(gp.relay.ClientIDMutation):
 	class Input:
 		name = gp.String(required=True)
 		house = gp.String(required=True)
+		id = gp.ID()
 
 	student = gp.Field(StudentNode)
 	success = gp.Boolean()
@@ -136,8 +149,8 @@ class ChangeStudentHouse(gp.relay.ClientIDMutation):
 	@classmethod
 	def mutate_and_get_payload(cls, root, info, name, house_name, id):
 		# student_query = StudentNode.get_query(info)
-		print(from_global_id(id))
-		student_query = Student.objects.get(pk=from_global_id(id)[1])
+		print(gq_relay.from_global_id(id))
+		student_query = Student.objects.get(pk=gq_relay.from_global_id(id)[1])
 		if not name:
 			raise gq.GraphQLError('Please provide student name.')
 		if not house_name:
@@ -175,11 +188,8 @@ class Query(gp.ObjectType):
 	student_by_name = gp.Field(StudentNode, name=gp.String())
 	staff_by_name = gp.Field(StaffNode, name=gp.String())
 	house_by_name = gp.Field(HouseNode, name=gp.String())
-	# staff_by_position = gp.List(StaffByPositionResult, position=gp.String())
 	staff_by_position = gp.List(StaffNode, position=gp.String())
-
-# 	pet = gp.Field(PetNode, name=gp.String())
-# 	pet_by_student_name = gp.Field(PetNode, student_name=gp.String())
+	search_by_house = gp.List(SearchResult, house_name=gp.String())
 
 	# simple resolver
 	def resolve_student_by_name(self, info, name):
@@ -211,6 +221,19 @@ class Query(gp.ObjectType):
 		r = query.filter(StaffModel.position == position).all()
 		return r
 
+	def resolve_search_by_house(self, info, house_name):
+		staff_query = StaffNode.get_query(info)
+		student_query = StudentNode.get_query(info)
+		house_query = HouseNode.get_query(info)
+		if not house_name:
+			raise gq.GraphQLError('Please provide house name.')
+
+		house = house_query.filter(HouseModel.name == house_name).first()
+
+		staff_results = staff_query.filter(StaffModel.house == house).all()
+		student_results = student_query.filter(StudentModel.house == house).all()
+		return staff_results + student_results
+
 
 # 	# TODO: new traverse relationship!!!
 
@@ -224,10 +247,10 @@ class Query(gp.ObjectType):
 # 	# 	return pet_query.filter(PetModel.student_id == student_result.id).first()
 
 class Mutation(gp.ObjectType):
-# 	create_pet = CreatePet.Field()
+	create_student = CreateStudent.Field()
 	change_student_house = ChangeStudentHouse.Field()
 
 
 schema = gp.Schema(query=Query,
-                   types=[HouseNode, StudentNode, StaffNode],
+                   types=[HouseNode, StudentNode, StaffNode, SearchResult],
 				   mutation=Mutation)
