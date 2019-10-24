@@ -124,7 +124,6 @@ class ChangeStudentHouse(gp.relay.ClientIDMutation):
 
 	@classmethod
 	def mutate_and_get_payload(cls, root, info, house_name, id):
-		# student_query = StudentNode.get_query(info)
 		student_id = gq_relay.from_global_id(id)[1]
 		student_query = StudentNode.get_query(info)
 		student = student_query.filter(StudentModel.id == student_id).first()

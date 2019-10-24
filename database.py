@@ -43,12 +43,13 @@ def init_db():
 		staff = json.load(file)
 		for staff_member in staff:
 			staff_model = Staff(name=staff_member['name'],
-				                position=staff_member['position'],
-				                specialization=staff_member['specialization'],
-				                house=houses_map.get(staff_member.get('house')),
-					 		  	wand_wood=student['wand_wood'],
-							  	wand_core=student['wand_core'],
-							  	wand_length=float(student['wand_length']))
+                                position=staff_member['position'],
+                                specialization=staff_member['specialization'],
+                                house=houses_map.get(staff_member.get('house')),
+                                wand_wood=staff_member['wand_wood'],
+                                wand_core=staff_member['wand_core'],
+                                wand_length=float(staff_member['wand_length']),
+                                wand=staff_member.get('wand'))
 			db_session.add(staff_model)
 	
 	db_session.commit()

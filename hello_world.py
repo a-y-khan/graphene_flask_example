@@ -1,5 +1,4 @@
 import graphene as gp
-from gql import gql, Client
 
 class Query(gp.ObjectType):
     hello = gp.String(argument=gp.String(default_value='world'))
@@ -7,10 +6,8 @@ class Query(gp.ObjectType):
     # this is where the magic happens!
     # pattern is always resolve_<field>
     def resolve_hello(self, info, argument):
-        # info:
-        # ResolveInfo class: https://github.com/graphql-python/graphql-core
+        # info: ResolveInfo (https://github.com/graphql-python/graphql-core)
         return 'hello ' + argument
-
 schema = gp.Schema(query=Query)
 
 if '__main__' == __name__:
