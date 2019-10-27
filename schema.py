@@ -92,25 +92,6 @@ class CreateStudent(gp.relay.ClientIDMutation):
 		db.db_session.commit()
 		return CreateStudent(student=student, success=True)
 
-class DeleteStudent(gp.relay.ClientIDMutation):
-	class Input:
-		id = gp.ID(required=True)
-
-	student = gp.Field(StudentNode)
-	success = gp.Boolean()
-
-	@classmethod
-	def mutate_and_get_payload(cls, root, info, id):
-		student_id = gq_relay.from_global_id(id)[1]
-		student_query = StudentNode.get_query(info)
-		student = student_query.filter(StudentModel.id == student_id).first()
-		if not student:
-			raise gq.GraphQLError(f'Could not find student with id {id}')
-
-		db.db_session.delete(student)
-		db.db_session.commit()
-		return DeleteStudent(student=student, success=True)
-
 class ChangeStudentHouse(gp.relay.ClientIDMutation):
 	class Input:
 		house_name = gp.String(required=True)
@@ -136,6 +117,25 @@ class ChangeStudentHouse(gp.relay.ClientIDMutation):
 		db.db_session.commit()
 
 		return ChangeStudentHouse(student=student, success=True)
+
+class DeleteStudent(gp.relay.ClientIDMutation):
+	class Input:
+		id = gp.ID(required=True)
+
+	student = gp.Field(StudentNode)
+	success = gp.Boolean()
+
+	@classmethod
+	def mutate_and_get_payload(cls, root, info, id):
+		student_id = gq_relay.from_global_id(id)[1]
+		student_query = StudentNode.get_query(info)
+		student = student_query.filter(StudentModel.id == student_id).first()
+		if not student:
+			raise gq.GraphQLError(f'Could not find student with id {id}')
+
+		db.db_session.delete(student)
+		db.db_session.commit()
+		return DeleteStudent(student=student, success=True)
 
 class Query(gp.ObjectType):
 	node = gp.relay.Node.Field()
@@ -200,7 +200,6 @@ class Mutation(gp.ObjectType):
 	create_student = CreateStudent.Field()
 	delete_student = DeleteStudent.Field()
 	change_student_house = ChangeStudentHouse.Field()
-
 
 schema = gp.Schema(query=Query,
                    types=[HouseNode, StudentNode, StaffNode, SearchResult],
