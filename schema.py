@@ -62,7 +62,6 @@ class CreateStudent(gp.relay.ClientIDMutation):
 
 	@classmethod
 	def mutate_and_get_payload(cls, root, info, **input):
-		# schema checks for required fields!
 		house_query = HouseNode.get_query(info)
 		house = house_query.filter(HouseModel.name == input['house_name']).first()
 		if not house:
@@ -88,7 +87,6 @@ class CreateStudent(gp.relay.ClientIDMutation):
 			for s in found_students:
 				print(s.id)
 			raise gq.GraphQLError(f'Student with attributes {input} already exists')
-			# return CreateStudent(student=None, success=False)
 
 		db.db_session.add(student)
 		db.db_session.commit()
@@ -183,8 +181,7 @@ class Query(gp.ObjectType):
 		pprint(str(query))
 		if not position:
 			raise gq.GraphQLError('Please provide staff position')
-		r = query.filter(StaffModel.position == position).all()
-		return r
+		return query.filter(StaffModel.position == position).all()
 
 	def resolve_search_by_house(self, info, house_name):
 		staff_query = StaffNode.get_query(info)
