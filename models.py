@@ -26,9 +26,6 @@ class Student(db_Base):
 	wand_length = sa.Column(sa.Float, doc="Length of student's wand.")
 	wand_length_unit = sa.Column(sa.String, doc="Measurement unit used for wand length.", default="inch")
 	house_id = sa.Column(sa.Integer, sa.ForeignKey("house.id"))
-	# house = sa_orm.relationship(
-	# 	House,
-	# 	backref=sa_orm.backref('houses', uselist=True, cascade="delete,all"))
 	house = sa_orm.relationship(House)
 
 class Staff(db_Base):
