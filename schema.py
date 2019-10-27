@@ -84,7 +84,6 @@ class CreateStudent(gp.relay.ClientIDMutation):
 			(StudentModel.wand_length == student.wand_length) and
 			(StudentModel.wand_length_unit == student.wand_length_unit)).all()
 
-		print(found_students)
 		if len(found_students):
 			for s in found_students:
 				print(s.id)
