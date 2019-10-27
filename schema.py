@@ -158,11 +158,15 @@ class Query(gp.ObjectType):
 	staff_by_position = gp.List(StaffNode, position=gp.String())
 	search_by_house = gp.List(SearchResult, house_name=gp.String())
 
-	# simple resolver
+	# simple resolver	
+	def resolve_house_by_name(self, info, name):
+		query = HouseNode.get_query(info)
+		if not name:
+			raise gq.GraphQLError('Please provide Hogwarts house name')
+		return query.filter(HouseModel.name == name).first()
+
 	def resolve_student_by_name(self, info, name):
 		query = StudentNode.get_query(info)
-		# for demonstration purposes
-		pprint(str(query))
 		if not name:
 			raise gq.GraphQLError('Please provide student name')
 		return query.filter(StudentModel.name == name).first()
@@ -172,12 +176,6 @@ class Query(gp.ObjectType):
 		if not name:
 			raise gq.GraphQLError('Please provide staff member name')
 		return query.filter(StaffModel.name == name).first()
-	
-	def resolve_house_by_name(self, info, name):
-		query = HouseNode.get_query(info)
-		if not name:
-			raise gq.GraphQLError('Please provide Hogwarts house name')
-		return query.filter(HouseModel.name == name).first()
 
 	def resolve_staff_by_position(self, info, position):
 		query = StaffNode.get_query(info)
