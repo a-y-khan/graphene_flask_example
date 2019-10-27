@@ -24,7 +24,9 @@ class Student(db_Base):
 	wand_wood = sa.Column(sa.String, doc="Hogwarts student's wand material.")
 	wand_core = sa.Column(sa.String, doc="Hogwarts student's wand core.")
 	wand_length = sa.Column(sa.Float, doc="Length of student's wand.")
-	wand_length_unit = sa.Column(sa.String, doc="Measurement unit used for wand length.", default="inch")
+	wand_length_unit = sa.Column(sa.String,
+	                             doc="Measurement unit used for wand length.",
+	                             default="inch")
 	house_id = sa.Column(sa.Integer, sa.ForeignKey("house.id"))
 	house = sa_orm.relationship(House)
 

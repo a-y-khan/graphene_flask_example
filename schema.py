@@ -96,7 +96,6 @@ class ChangeStudentHouse(gp.relay.ClientIDMutation):
 	class Input:
 		house_name = gp.String(required=True)
 		id = gp.ID(required=True)
-
 	student = gp.Field(StudentNode)
 	success = gp.Boolean()
 
@@ -107,7 +106,7 @@ class ChangeStudentHouse(gp.relay.ClientIDMutation):
 		student = student_query.filter(StudentModel.id == student_id).first()
 		if not student:
 			raise gq.GraphQLError(f'Could not find student with id {id}')
-	
+
 		house_query = HouseNode.get_query(info)
 		house = house_query.filter(HouseModel.name == house_name).first()
 		if not house:
@@ -115,7 +114,6 @@ class ChangeStudentHouse(gp.relay.ClientIDMutation):
 
 		student.house = house
 		db.db_session.commit()
-
 		return ChangeStudentHouse(student=student, success=True)
 
 class DeleteStudent(gp.relay.ClientIDMutation):
