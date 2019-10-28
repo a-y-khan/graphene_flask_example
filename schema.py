@@ -100,7 +100,8 @@ class ChangeStudentHouse(gp.relay.ClientIDMutation):
 	success = gp.Boolean()
 
 	@classmethod
-	def mutate_and_get_payload(cls, root, info, house_name, id):
+	def mutate_and_get_payload(cls, root, info, house_name, id,
+	                           client_mutation_id=None):
 		student_id = gq_relay.from_global_id(id)[1]
 		student_query = StudentNode.get_query(info)
 		student = student_query.filter(StudentModel.id == student_id).first()
@@ -124,7 +125,7 @@ class DeleteStudent(gp.relay.ClientIDMutation):
 	success = gp.Boolean()
 
 	@classmethod
-	def mutate_and_get_payload(cls, root, info, id):
+	def mutate_and_get_payload(cls, root, info, id, client_mutation_id=None):
 		student_id = gq_relay.from_global_id(id)[1]
 		student_query = StudentNode.get_query(info)
 		student = student_query.filter(StudentModel.id == student_id).first()
