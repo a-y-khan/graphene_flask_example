@@ -1,116 +1,124 @@
-query q_all_pets {
-  allPets {
-    pageInfo {
-      startCursor
-      endCursor
-      hasNextPage
-      hasPreviousPage
-    }
-    edges {
-      cursor
-      node {
-        name
-        species
-        student {
-          name
-        }
-      }
-    }
+* Query:
+{
+  houseByName(name: "Ravenclaw") {
+    founder
+    location
+    colors
   }
 }
-query q_all_pets_slice {
-  allPets(first: 1) {
-    pageInfo {
-      startCursor
-      endCursor
-      hasNextPage
-      hasPreviousPage
-    }
-    edges {
-      cursor
-      node {
-        name
-        species
-        student {
-          name
-        }
-      }
-    }
-  }
-}
-query q_all_students {
-  allStudents
-}
-query q_all_students_sort1 {
-  allStudents(sort: name_desc) {
-    edges {
-      node {
-        name
-      }
-    }
-  }
-}
-query q_all_students_sort2 {
-  allStudents(sort: [name_asc, house_id_desc]) {
+---
+* Query:
+query {
+  allStudents {
     edges {
       node {
         id
         name
-        houseId
       }
+    }
+    pageInfo {
+      hasNextPage
     }
   }
 }
-query q_all_houses {
-  allHouses
+---
+* Query:
+query {
+  allHouses(sort: NAME_ASC) {
+    edges {
+      node {
+        id
+        name
+      }
+    }
+    pageInfo {
+      hasNextPage
+    }
+  }
 }
-query q_student_by_name {
-  studentByName(name: "Cho Chang")
-}
-query q_pet_student_name {
-  petByStudentName(studentName: "Hermione Granger") {
+---
+* Query:
+query ($name: String!) {
+  studentByName(name: $name) {
     id
     name
-    species
-    studentId
+    house {
+      name
+      crest
+    }
+  }
+}
+* Query Variables:
+{
+  "name": "Hermione Granger"
+}
+---
+* Query:
+query search_by_house {
+  searchByHouse(houseName: "Ravenclaw") {
+    __typename
+    ...on StaffNode {
+      name
+      position
+    }
+    ...on StudentNode {
+      name
+    }
+  }
+}
+---
+* Mutation:
+mutation createStudent($input: CreateStudentInput!) {
+  createStudent(input: $input) {
     student {
       id
       house {
         name
-        location
       }
     }
-  } 
+    success
+  }
 }
-query q_pet {
-  pet(name: "Pigwidgeon") {
-    id
-    name
-    species
+* Query Variables:
+{
+  "input": {
+    "name": "Dennis Creevey",
+    "houseName": "Ravenclaw"
+  }
+}
+---
+* Mutation:
+mutation changeStudentHouse($corrected_input: ChangeStudentHouseInput!) {
+  changeStudentHouse(input: $corrected_input) {
+    student {
+      name
+      house {
+        name
+      }
+    }
+    success
+  }
+}
+* Query Variables:
+{
+  "corrected_input": {
+    "id": "U3R1ZGVudE5vZGU6MTc=",
+    "houseName": "Gryffindor"
+  }
+}
+---
+* Mutation:
+mutation deleteStudent($input: DeleteStudentInput!) {
+  deleteStudent(input: $input) {
     student {
       name
     }
+    success
   }
 }
-mutation m_change_house {
-  changeStudentHouse(input: {name: "Ron Weasley", house: "Ravenclaw"})
-}
-mutation m_create_pet {
-  createPet(input: {name: "Charlie", species: "cat", studentName: "Hermione Granger"})
-}
-query q_get_charlie {
-  pet(name: "Charlie") {
-    id
-    species
-    student {
-      name
-    }
+* Query Variables:
+{
+  "input": {
+    "id": "U3R1ZGVudE5vZGU6MTc="
   }
 }
-mutation {
-  changeStudentHouse(input: {name: "Don Weatherby", house: "Ravenclaw"}) {
-    ok
-    clientMutationId
-  }
-}
-
