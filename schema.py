@@ -196,8 +196,8 @@ class Query(gp.ObjectType):
 
 class Mutation(gp.ObjectType):
 	create_student = CreateStudent.Field()
-	delete_student = DeleteStudent.Field()
 	change_student_house = ChangeStudentHouse.Field()
+	delete_student = DeleteStudent.Field()
 
 schema = gp.Schema(query=Query,
                    types=[HouseNode, StudentNode, StaffNode, SearchResult],
