@@ -1,3 +1,4 @@
+from datetime import datetime
 import graphene as gp
 import graphene_sqlalchemy as gp_sa
 import graphql as gq
@@ -16,8 +17,18 @@ class HouseNode(gp_sa.SQLAlchemyObjectType):
 		interfaces = (gp.relay.Node, )
 
 class HouseConnection(gp.relay.Connection):
+	total_count = gp.Int(description="Count how many houses are in list.")
+
+	def resolve_total_count(self, info):
+		return HouseNode.get_query(info).count()
+
 	class Meta:
 		node = HouseNode
+	
+	class Edge:
+		timestamp = gp.String(description="Annotate edge with timestamp.")
+		def resolve_timestamp(self, info):
+			return datetime.now().isoformat()
 
 class StudentNode(gp_sa.SQLAlchemyObjectType):
 	class Meta:
@@ -112,7 +123,6 @@ class ChangeStudentHouse(gp.relay.ClientIDMutation):
 		house = house_query.filter(HouseModel.name == house_name).first()
 		if not house:
 			raise gq.GraphQLError(f'Could not find house {house_name}')
-
 		student.house = house
 		db.db_session.commit()
 		return ChangeStudentHouse(student=student, success=True)

@@ -25,7 +25,9 @@ query {
 * Query:
 query {
   allHouses(sort: NAME_ASC) {
+    totalCount
     edges {
+      timestamp
       node {
         id
         name
