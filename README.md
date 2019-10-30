@@ -1,9 +1,10 @@
 # graphene_flask_example
-Graphene/Flask example for SLC Python talk. Slides are available on [Google Slides](https://docs.google.com/presentation/d/1kHHAsFk-U-JQQmj7f32HE9FTnsJJECo9cmOxyCTdnB8/edit?usp=sharing).
+Graphene/Flask example for Big Mountain Data & Dev 2019.
+Slides are available on [Google Slides](https://docs.google.com/presentation/d/1ZmuEBYA84WsdZrRiHwS4Al9JltFfQcV29T_fWGN2V5w/edit?usp=sharing).
 
 ## Python version
 
-Code was tested with Python 3.6.8 and 3.7.2.
+Code was tested with Python 3.7.4.
 
 ## Build and run
 
