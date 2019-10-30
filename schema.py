@@ -55,6 +55,24 @@ class StaffConnection(gp.relay.Connection):
 	class Meta:
 		node = StaffNode
 
+class HouseEnrollment(gp.ObjectType):
+	class Meta:
+		interfaces = (gp.relay.Node, )
+
+	students = gp.relay.ConnectionField(StudentConnection,
+	                                    description="TODO")
+
+	def resolve_students(self, info, **input):
+		print("resolve_students")
+		return self.students
+
+	@classmethod
+	def get_node(cls, info, id):
+		print("get_node")
+		print(info)
+		print(id)
+		return HouseEnrollment(id)
+
 class SearchResult(gp.Union):
     class Meta:
         types = (StaffNode, StudentNode)
@@ -150,7 +168,7 @@ class Query(gp.ObjectType):
 	# node root field required by Relay specification
 	node = gp.relay.Node.Field()
 	
-	# Default filters that return all data in table
+	# Filters that return all data for types
 	#
 	# Set sort=None argument to disable ability to sort
 	# For example:
@@ -159,12 +177,13 @@ class Query(gp.ObjectType):
 	all_students = gp_sa.SQLAlchemyConnectionField(StudentConnection)
 	all_staff = gp_sa.SQLAlchemyConnectionField(StaffConnection)
 
-	# custom filters
+	# Targeted filters
 	student_by_name = gp.Field(StudentNode, name=gp.String())
 	staff_by_name = gp.Field(StaffNode, name=gp.String())
 	house_by_name = gp.Field(HouseNode, name=gp.String())
 	staff_by_position = gp.List(StaffNode, position=gp.String())
 	search_by_house = gp.List(SearchResult, house_name=gp.String())
+	house_enrollment = gp.Field(HouseEnrollment, house_name=gp.String())
 
 	# simple resolver	
 	def resolve_house_by_name(self, info, name):
@@ -205,6 +224,13 @@ class Query(gp.ObjectType):
 		staff_results = staff_query.filter(StaffModel.house == house).all()
 		student_results = student_query.filter(StudentModel.house == house).all()
 		return staff_results + student_results
+	
+	def resolve_house_enrollment(self, info, house_name):
+		house_query = HouseNode.get_query(info)
+		house = house_query.filter(HouseModel.name == house_name).first()
+		student_query = StudentNode.get_query(info)
+		students = student_query.filter(StudentModel.house == house).all()
+		return HouseEnrollment(students=students)
 
 class Mutation(gp.ObjectType):
 	create_student = CreateStudent.Field()
