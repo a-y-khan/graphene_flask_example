@@ -17,11 +17,6 @@ class HouseNode(gp_sa.SQLAlchemyObjectType):
 		interfaces = (gp.relay.Node, )
 
 class HouseConnection(gp.relay.Connection):
-	total_count = gp.Int(description="Count how many houses are in list.")
-
-	def resolve_total_count(self, info):
-		return HouseNode.get_query(info).count()
-
 	class Meta:
 		node = HouseNode
 	
@@ -29,6 +24,11 @@ class HouseConnection(gp.relay.Connection):
 		timestamp = gp.String(description="Annotate edge with timestamp.")
 		def resolve_timestamp(self, info):
 			return datetime.now().isoformat()
+
+	total_count = gp.Int(description="Count how many houses are in list.")
+
+	def resolve_total_count(self, info):
+		return HouseNode.get_query(info).count()
 
 class StudentNode(gp_sa.SQLAlchemyObjectType):
 	class Meta:
@@ -147,6 +147,7 @@ class DeleteStudent(gp.relay.ClientIDMutation):
 		return DeleteStudent(student=student, success=True)
 
 class Query(gp.ObjectType):
+	# node root field required by Relay specification
 	node = gp.relay.Node.Field()
 	
 	# Default filters that return all data in table
