@@ -17,9 +17,12 @@ class HouseNode(gp_sa.SQLAlchemyObjectType):
 		interfaces = (gp.relay.Node, )
 
 class HouseConnection(gp.relay.Connection):
+	# Meta is required
 	class Meta:
 		node = HouseNode
 	
+	# Edge, other fields like total_count and their resolvers
+	# are optional
 	class Edge:
 		timestamp = gp.String(description="Annotate edge with timestamp.")
 		def resolve_timestamp(self, info):
@@ -61,17 +64,12 @@ class HouseEnrollment(gp.ObjectType):
 
 	students = gp.relay.ConnectionField(StudentConnection,
 	                                    description="TODO")
-
 	def resolve_students(self, info, **input):
-		print("resolve_students")
 		return self.students
 
 	@classmethod
 	def get_node(cls, info, id):
-		print("get_node")
-		print(info)
-		print(id)
-		return HouseEnrollment(id)
+		return HouseEnrollment(id=id)
 
 class SearchResult(gp.Union):
     class Meta:
@@ -229,8 +227,8 @@ class Query(gp.ObjectType):
 		house_query = HouseNode.get_query(info)
 		house = house_query.filter(HouseModel.name == house_name).first()
 		student_query = StudentNode.get_query(info)
-		students = student_query.filter(StudentModel.house == house).all()
-		return HouseEnrollment(students=students)
+		return HouseEnrollment(students=student_query.filter(
+			StudentModel.house == house).all())
 
 class Mutation(gp.ObjectType):
 	create_student = CreateStudent.Field()
