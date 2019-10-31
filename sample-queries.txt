@@ -1,5 +1,4 @@
-* Query:
-{
+query {
   houseByName(name: "Ravenclaw") {
     founder
     location
@@ -7,7 +6,6 @@
   }
 }
 ---
-* Query:
 query {
   allStudents {
     edges {
@@ -22,7 +20,6 @@ query {
   }
 }
 ---
-* Query:
 query {
   allHouses(sort: NAME_ASC) {
     totalCount
@@ -39,7 +36,6 @@ query {
   }
 }
 ---
-* Query:
 query enrollment {
   houseEnrollment(houseName: "Hufflepuff") {
     students {
@@ -53,7 +49,6 @@ query enrollment {
   }
 }
 ---
-* Query:
 query allStudents {
   allStudents(sort: ID_ASC, last: 2) {
     totalCount
@@ -70,7 +65,6 @@ query allStudents {
   }
 }
 ---
-* Query:
 query ($name: String!) {
   studentByName(name: $name) {
     id
@@ -86,7 +80,6 @@ query ($name: String!) {
   "name": "Hermione Granger"
 }
 ---
-* Query:
 query search_by_house {
   searchByHouse(houseName: "Ravenclaw") {
     __typename
@@ -100,7 +93,13 @@ query search_by_house {
   }
 }
 ---
-* Mutation:
+query {
+  node(id: "U3R1ZGVudE5vZGU6Mg==") {
+    id
+    __typename
+  }
+}
+---
 mutation createStudent($input: CreateStudentInput!) {
   createStudent(input: $input) {
     student {
@@ -120,7 +119,6 @@ mutation createStudent($input: CreateStudentInput!) {
   }
 }
 ---
-* Mutation:
 mutation changeStudentHouse($corrected_input: ChangeStudentHouseInput!) {
   changeStudentHouse(input: $corrected_input) {
     student {
@@ -140,7 +138,6 @@ mutation changeStudentHouse($corrected_input: ChangeStudentHouseInput!) {
   }
 }
 ---
-* Mutation:
 mutation deleteStudent($input: DeleteStudentInput!) {
   deleteStudent(input: $input) {
     student {
