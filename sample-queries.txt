@@ -70,7 +70,16 @@ query allStudents {
   }
 }
 ---
-query ($name: String!) {
+query house {
+  house(id: "SG91c2VOb2RlOjI=") {
+    name
+    founder
+    crest
+    ghost
+  }
+}
+---
+query studentbyname ($name: String!) {
   studentByName(name: $name) {
     id
     name

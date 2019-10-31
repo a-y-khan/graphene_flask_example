@@ -187,7 +187,7 @@ class Query(gp.ObjectType):
 	# node root field required by Relay specification
 	node = gp.relay.Node.Field()
 	
-	# Filters that return all data for types
+	# Fields that return all data for types
 	#
 	# Set sort=None argument to disable ability to sort
 	# For example:
@@ -202,7 +202,12 @@ class Query(gp.ObjectType):
 		StaffConnection,
 		description="Get all staff who work at Hogwarts.")
 
-	# Targeted filters
+	# Relay node fields
+	house = gp.relay.Node.Field(HouseNode)
+	staff = gp.relay.Node.Field(StaffNode)
+	student = gp.relay.Node.Field(StudentNode)
+
+	# Fields with targeted filters
 	student_by_name = gp.Field(StudentNode, name=gp.String(),
 	                           description="Get Hogwarts student by name.")
 	staff_by_name = gp.Field(StaffNode, name=gp.String(),
