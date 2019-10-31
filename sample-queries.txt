@@ -38,12 +38,17 @@ query {
 ---
 query enrollment {
   houseEnrollment(houseName: "Hufflepuff") {
-    students {
+    students(sort:ID_ASC, last: 2) {
       edges {
         node {
           id
           name
         }
+      }
+      pageInfo {
+        hasNextPage
+        startCursor
+        endCursor
       }
     }
   }
