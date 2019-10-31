@@ -12,11 +12,13 @@ from models import Staff as StaffModel
 import database as db
 
 class HouseNode(gp_sa.SQLAlchemyObjectType):
+	"""Node to support House type."""
 	class Meta:
 		model = HouseModel
 		interfaces = (gp.relay.Node, )
 
 class HouseConnection(gp.relay.Connection):
+	"""Connection to support listing House nodes."""
 	# Meta is required
 	class Meta:
 		node = HouseNode
@@ -24,6 +26,7 @@ class HouseConnection(gp.relay.Connection):
 	# Edge, other fields like total_count and their resolvers
 	# are optional
 	class Edge:
+		"""Annotate connection edges with additional fields."""
 		timestamp = gp.String(description="Annotate edge with timestamp.")
 		def resolve_timestamp(self, info):
 			return datetime.now().isoformat()
@@ -33,21 +36,8 @@ class HouseConnection(gp.relay.Connection):
 	def resolve_total_count(self, info):
 		return HouseNode.get_query(info).count()
 
-class StudentNode(gp_sa.SQLAlchemyObjectType):
-	class Meta:
-		model = StudentModel
-		interfaces = (gp.relay.Node, )
-
-class StudentConnection(gp.relay.Connection):
-	class Meta:
-		node = StudentNode
-
-	total_count = gp.Int(description="Count how many students are in list.")
-
-	def resolve_total_count(self, info):
-		return StudentNode.get_query(info).count()
-
 class StaffNode(gp_sa.SQLAlchemyObjectType):
+	"""Node to support Staff type."""
 	class Meta:
 		model = StaffModel
 		interfaces = (gp.relay.Node, )
@@ -60,15 +50,38 @@ class StaffNode(gp_sa.SQLAlchemyObjectType):
 										"to describe a wand instead.")
 
 class StaffConnection(gp.relay.Connection):
+	"""Connection to support listing Staff nodes."""
 	class Meta:
 		node = StaffNode
 
-class HouseEnrollment(gp.ObjectType):
+class StudentNode(gp_sa.SQLAlchemyObjectType):
+	"""Node to support Student type."""
+	# Meta is required
 	class Meta:
+		model = StudentModel
 		interfaces = (gp.relay.Node, )
 
-	students = gp.relay.ConnectionField(StudentConnection,
-	                                    description="TODO")
+class StudentConnection(gp.relay.Connection):
+	"""Connection to support listing Student nodes."""
+	# Meta is required
+	class Meta:
+		node = StudentNode
+
+	# Any additional fields like total_count and their resolvers are optional
+	total_count = gp.Int(description="Count how many students are in list.")
+
+	def resolve_total_count(self, info):
+		return StudentNode.get_query(info).count()
+
+class HouseEnrollment(gp.ObjectType):
+	"""Get the students that were sorted into a house."""
+	class Meta:
+		interfaces = (gp.relay.Node, )
+		
+
+	students = gp_sa.SQLAlchemyConnectionField(
+		StudentConnection,
+		description="Students sorted into this house.")
 	def resolve_students(self, info, **input):
 		return self.students
 
@@ -77,10 +90,12 @@ class HouseEnrollment(gp.ObjectType):
 		return HouseEnrollment(id=id)
 
 class SearchResult(gp.Union):
-    class Meta:
-        types = (StaffNode, StudentNode)
+	"""Union of Staff and Student types."""
+	class Meta:
+		types = (StaffNode, StudentNode)
 
 class CreateStudent(gp.relay.ClientIDMutation):
+	"""Create a new Hogwarts student."""
 	class Input:
 		name = gp.String(required=True)
 		house_name = gp.String(required=True)
@@ -125,6 +140,7 @@ class CreateStudent(gp.relay.ClientIDMutation):
 		return CreateStudent(student=student, success=True)
 
 class ChangeStudentHouse(gp.relay.ClientIDMutation):
+	"""Assign a Hogwarts student to a new House."""
 	class Input:
 		house_name = gp.String(required=True)
 		id = gp.ID(required=True)
@@ -149,6 +165,7 @@ class ChangeStudentHouse(gp.relay.ClientIDMutation):
 		return ChangeStudentHouse(student=student, success=True)
 
 class DeleteStudent(gp.relay.ClientIDMutation):
+	"""Delete a Hogwarts student's data."""
 	class Input:
 		id = gp.ID(required=True)
 
@@ -176,17 +193,30 @@ class Query(gp.ObjectType):
 	# Set sort=None argument to disable ability to sort
 	# For example:
 	# all_houses = gp_sa.SQLAlchemyConnectionField(HouseConnection, sort=None)
-	all_houses = gp_sa.SQLAlchemyConnectionField(HouseConnection)
-	all_students = gp_sa.SQLAlchemyConnectionField(StudentConnection)
-	all_staff = gp_sa.SQLAlchemyConnectionField(StaffConnection)
+	all_houses = gp_sa.SQLAlchemyConnectionField(
+		HouseConnection,
+	    description="Get all Hogwarts Houses.")
+	all_students = gp_sa.SQLAlchemyConnectionField(
+		StudentConnection,
+		description="Get all students enrolled at Hogwarts.")
+	all_staff = gp_sa.SQLAlchemyConnectionField(
+		StaffConnection,
+		description="Get all staff who work at Hogwarts.")
 
 	# Targeted filters
-	student_by_name = gp.Field(StudentNode, name=gp.String())
-	staff_by_name = gp.Field(StaffNode, name=gp.String())
-	house_by_name = gp.Field(HouseNode, name=gp.String())
-	staff_by_position = gp.List(StaffNode, position=gp.String())
-	search_by_house = gp.List(SearchResult, house_name=gp.String())
-	house_enrollment = gp.Field(HouseEnrollment, house_name=gp.String())
+	student_by_name = gp.Field(StudentNode, name=gp.String(),
+	                           description="Get Hogwarts student by name.")
+	staff_by_name = gp.Field(StaffNode, name=gp.String(),
+	                         description="Get Hogwarts staff member by name.")
+	house_by_name = gp.Field(HouseNode, name=gp.String(),
+	                         description="Get Hogwarts House by name.")
+	staff_by_position = gp.List(StaffNode, position=gp.String(),
+	                            description="Get Hogwarts staff member by position.")
+	search_by_house = gp.List(SearchResult, house_name=gp.String(),
+	                          description="Get Hogwarts staff members and students "
+							              "by house.")
+	house_enrollment = gp.Field(HouseEnrollment, house_name=gp.String(),
+	                            description="Get students sorted into a house.")
 
 	# simple resolver	
 	def resolve_house_by_name(self, info, name):
@@ -241,5 +271,6 @@ class Mutation(gp.ObjectType):
 	delete_student = DeleteStudent.Field()
 
 schema = gp.Schema(query=Query,
-                   types=[HouseNode, StudentNode, StaffNode, SearchResult],
+                   types=[HouseNode, StudentNode, StaffNode,
+				          HouseEnrollment, SearchResult],
 				   mutation=Mutation)
