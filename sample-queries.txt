@@ -40,6 +40,37 @@ query {
 }
 ---
 * Query:
+query enrollment {
+  houseEnrollment(houseName: "Hufflepuff") {
+    students {
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+---
+* Query:
+query allStudents {
+  allStudents(sort: ID_ASC, last: 2) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+    }
+  }
+}
+---
+* Query:
 query ($name: String!) {
   studentByName(name: $name) {
     id

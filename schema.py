@@ -42,6 +42,11 @@ class StudentConnection(gp.relay.Connection):
 	class Meta:
 		node = StudentNode
 
+	total_count = gp.Int(description="Count how many students are in list.")
+
+	def resolve_total_count(self, info):
+		return StudentNode.get_query(info).count()
+
 class StaffNode(gp_sa.SQLAlchemyObjectType):
 	class Meta:
 		model = StaffModel
