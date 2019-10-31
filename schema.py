@@ -77,7 +77,6 @@ class HouseEnrollment(gp.ObjectType):
 	"""Get the students that were sorted into a house."""
 	class Meta:
 		interfaces = (gp.relay.Node, )
-		
 
 	students = gp_sa.SQLAlchemyConnectionField(
 		StudentConnection,
