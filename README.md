@@ -1,5 +1,5 @@
 # graphene_flask_example
-Graphene/Flask example for Big Mountain Data & Dev 2019.
+Graphene/Flask example for Big Mountain Data & Dev 2019 (talk code examples are in branch big_mountain_2019).
 Slides are available on [SlideShare](https://www.slideshare.net/AylaKhan1/build-graphql-apis-with-graphene-big-mountain-data-dev-2019-189172776).
 
 ## Python version
