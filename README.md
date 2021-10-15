@@ -4,23 +4,25 @@ Slides are available on [SlideShare](https://www.slideshare.net/AylaKhan1/build-
 
 ## Python version
 
-Code was tested with Python 3.7.4.
+Code was tested with Python 3.7.11.
 
 ## Build and run
 
-In a virtualenv or conda environment:
+In a venv, virtualenv or conda environment:
 
 ```
-pip install .
+pip install -r requirements/main_3.7.txt
 python app.py
 ```
 
 Explore data using the GraphiQL IDE by opening 0.0.0.0:5001 in a browser.
+Sample queries and mutations are saved in `sample-queries.txt`.
 
 ## Testing
 
-A sample test is included.
+Sample tests are included.
 
 ```
+pip install -r requirements/test_3.7.txt
 python setup.py test
 ```

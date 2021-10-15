@@ -1,5 +1,6 @@
 import graphene as gp
 
+
 class Query(gp.ObjectType):
     hello = gp.String(argument=gp.String(default_value='world'))
 
@@ -8,7 +9,10 @@ class Query(gp.ObjectType):
     def resolve_hello(self, info, argument):
         # info: ResolveInfo (https://github.com/graphql-python/graphql-core)
         return 'hello ' + argument
+
+
 schema = gp.Schema(query=Query)
+
 
 if '__main__' == __name__:
     # GraphQL's default serialization format is JSON!
