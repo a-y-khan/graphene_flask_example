@@ -18,7 +18,7 @@ class House(db_Base):
 class Student(db_Base):
     __tablename__ = 'student'
     id = sa.Column(sa.Integer, primary_key=True)
-    name = sa.Column(sa.String, nullable=False, doc="Hogwarts student name. " "Typically first name, surname.")
+    name = sa.Column(sa.String, nullable=False, doc="Hogwarts student name. Typically first name, surname.")
     wand_wood = sa.Column(sa.String, doc="Hogwarts student's wand material.")
     wand_core = sa.Column(sa.String, doc="Hogwarts student's wand core.")
     wand_length = sa.Column(sa.Float, doc="Length of student's wand.")
@@ -30,7 +30,7 @@ class Student(db_Base):
 class Staff(db_Base):
     __tablename__ = 'staff'
     id = sa.Column(sa.Integer, primary_key=True)
-    name = sa.Column(sa.String, nullable=False, doc="Hogwarts staff member name. " "Typically first name, surname.")
+    name = sa.Column(sa.String, nullable=False, doc="Hogwarts staff member name. Typically first name, surname.")
     position = sa.Column(sa.String)
     specialization = sa.Column(sa.String)
     wand_wood = sa.Column(sa.String, doc="Hogwarts staff member's wand material.")
