@@ -70,7 +70,7 @@ sqlalchemy==1.4.25
     #   graphene-sqlalchemy
 typing-extensions==3.10.0.2
     # via importlib-metadata
-werkzeug==2.0.2
+werkzeug==2.2.3
     # via flask
 zipp==3.6.0
     # via importlib-metadata
