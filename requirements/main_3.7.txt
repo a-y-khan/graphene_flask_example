@@ -8,7 +8,7 @@ aniso8601==7.0.0
     # via graphene
 click==8.0.3
     # via flask
-flask==2.0.2
+flask==2.3.2
     # via
     #   -r requirements/main.in
     #   flask-graphql
